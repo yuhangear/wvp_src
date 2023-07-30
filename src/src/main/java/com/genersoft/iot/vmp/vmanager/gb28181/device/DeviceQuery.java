@@ -1,11 +1,7 @@
 package com.genersoft.iot.vmp.vmanager.gb28181.device;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-
 import com.genersoft.iot.vmp.conf.DynamicTask;
-import com.genersoft.iot.vmp.conf.MediaConfig;
-import com.genersoft.iot.vmp.conf.SipConfig;
 import com.genersoft.iot.vmp.conf.exception.ControllerException;
 import com.genersoft.iot.vmp.gb28181.bean.Device;
 import com.genersoft.iot.vmp.gb28181.bean.DeviceChannel;
@@ -24,11 +20,7 @@ import com.genersoft.iot.vmp.storager.IVideoManagerStorage;
 import com.genersoft.iot.vmp.vmanager.bean.BaseTree;
 import com.genersoft.iot.vmp.vmanager.bean.ErrorCode;
 import com.genersoft.iot.vmp.vmanager.bean.WVPResult;
-import com.genersoft.iot.vmp.web.gb28181.dto.DeviceChannelExtend;
 import com.github.pagehelper.PageInfo;
-import com.mysql.cj.xdevapi.JsonArray;
-
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,18 +45,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.*;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-
 
 @Tag(name  = "国标设备查询", description = "国标设备查询")
 @SuppressWarnings("rawtypes")
@@ -74,11 +54,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class DeviceQuery {
 	
 	private final static Logger logger = LoggerFactory.getLogger(DeviceQuery.class);
-
-	@Autowired
-    private MediaConfig mediaConfig;
-
-
+	
 	@Autowired
 	private IVideoManagerStorage storager;
 
@@ -116,229 +92,22 @@ public class DeviceQuery {
 		return storager.queryVideoDevice(deviceId);
 	}
 
-	
-	// @Operation(summary = "分页查询国标设备")
-	// @GetMapping("/devices_StreamId")
-	// @Options()
-	// public String devices_StreamId(){
-
-
-		
-	// 	ObjectMapper mapper = new ObjectMapper();
-    //     ObjectNode json = mapper.createObjectNode();
-
-	// 	List<String> StreamList = new ArrayList<>();
-	// 	List<Device> devices=storager.queryVideoDeviceList(1, Integer.MAX_VALUE,null).getList();
-
-
-	// 	String ip_add = mediaConfig.getIp();
-	// 	String port = String.valueOf(mediaConfig.getHttpPort());
-	// 	String port_ssl = String.valueOf(mediaConfig.getHttpSSlPort());
-
-	// 	for (int i =0;i<devices.size();i++){
-	// 		String deviceId=devices.get(i).getDeviceId();
-	// 		// storager.queryChannelsByDeviceId(deviceId, null, null, null, null, 1, Integer.MAX_VALUE);
-
-	// 		String StreamId = storager.queryChannelsByDeviceId(deviceId, null, null, null, null, 1, Integer.MAX_VALUE).getList().get(0).getChannelId();
-	// 		///rtp/3402000000320000003_34020000001320000001.live.flv
-
-	// 		//ws://123.57.67.33:50306/rtp/3402000000320000003_34020000001320000001.live.flv
-	// 		String add_http = "ws://"+ip_add+":"+port+"/rtp/" + deviceId+"_"+StreamId +".live.flv";
-	// 		String add_https = "wss://"+ip_add+":"+port_ssl+"/rtp/" + deviceId+"_"+StreamId +".live.flv";
-	// 		List<String> adds=new ArrayList<>();
-	// 		adds.add( add_http);
-	// 		adds.add( add_https);
-
-	// 		json.put(deviceId,adds.toString());
-	// 		// json.put(deviceId,add_https);
-
-
-	// 		// StreamList.add();
-	// 	}
-	// 	return json.toString();
-
-
-	// }
-
-
-	// @Operation(summary = "分页查询国标设备")
-	// @GetMapping("/all_devices")
-	// @Options()
-	// @ResponseBody()
-	// public ArrayNode all_devices(){
-
-
-		
-	// 	ArrayNode arrayNode_all = JsonNodeFactory.instance.arrayNode();
-
-	// 	List<Device> devices=storager.queryVideoDeviceList(1, Integer.MAX_VALUE,null).getList();
-	// 	for (int i =0;i<devices.size();i++){
-	// 		String deviceId=devices.get(i).getDeviceId();
-	// 		String name_ = devices.get(i).getName();
-	// 		DeviceChannel target_dev = storager.queryChannelsByDeviceId(deviceId, null, null, null, null, 1, Integer.MAX_VALUE).getList().get(0);
-	// 		String StreamId = target_dev.getChannelId();
-
-	// 		ObjectNode objectNode = JsonNodeFactory.instance.objectNode();
-	// 		objectNode.put("name",name_);
-	// 		objectNode.put("ChannelId",StreamId);
-	// 		objectNode.put("deviceId",deviceId);
-
-
-	// 		arrayNode_all.add( objectNode);
-		
-
-		
-	// 	}
-	// 	return arrayNode_all;
-
-
-	// }
-
-
-	// /**
-	//  * 分页查询通道数
-	//  *
-	//  * @param deviceId 设备id
-	//  * @param page 当前页
-	//  * @param count 每页条数
-	//  * @param query 查询内容
-	//  * @param online 是否在线  在线 true / 离线 false
-	//  * @param channelType 设备 false/子目录 true
-	//  * @param catalogUnderDevice 是否直属与设备的目录
-	//  * @return 通道列表
-	//  */
-	// @GetMapping("/devices/{deviceId}/all_channels")
-	// @Operation(summary = "分页查询通道")
-	// @Parameter(name = "deviceId", description = "设备国标编号", required = true)
-	// @Parameter(name = "query", description = "查询内容")
-	// @Parameter(name = "online", description = "是否在线")
-	// @Parameter(name = "channelType", description = "设备/子目录-> false/true")
-	// @Parameter(name = "catalogUnderDevice", description = "是否直属与设备的目录")
-	// public String all_channels(@PathVariable String deviceId,
-	// 											@RequestParam(required = false) String query,
-	// 										   @RequestParam(required = false) Boolean online,
-	// 										   @RequestParam(required = false) Boolean channelType,
-	// 										   @RequestParam(required = false) Boolean catalogUnderDevice) {
-	// 	if (ObjectUtils.isEmpty(query)) {
-	// 		query = null;
-	// 	}
-
-	// 	DeviceChannel target_dev = storager.queryChannelsByDeviceId(deviceId, null, null, null, null, 1, Integer.MAX_VALUE).getList().get(0);
-	// 	String StreamId = target_dev.getChannelId();
-	// 	String name_ = target_dev.getName();
-
-
-	// 	String ip_add = mediaConfig.getIp();
-	// 	String port = String.valueOf(mediaConfig.getHttpPort());
-	// 	String port_ssl = String.valueOf(mediaConfig.getHttpSSlPort());
-			
-	// 	///rtp/3402000000320000003_34020000001320000001.live.flv
-
-	// 	//ws://123.57.67.33:50306/rtp/3402000000320000003_34020000001320000001.live.flv
-	// 	String add_http = "ws://"+ip_add+":"+port+"/rtp/" + deviceId+"_"+StreamId +".live.flv";
-	// 	String add_https = "wss://"+ip_add+":"+port_ssl+"/rtp/" + deviceId+"_"+StreamId +".live.flv";
-	// 	List<String> adds=new ArrayList<>();
-	// 	adds.add( add_http);
-	// 	adds.add( add_https);
-	// 	ObjectMapper mapper = new ObjectMapper();
-	// 	ObjectNode json = mapper.createObjectNode();
-		
-	// 	json.put("name",name_);
-	// 	json.put("deviceId",deviceId);
-		
-	// 	json.put("ChannelId",StreamId);
-	// 	json.put("ws",add_http);
-	// 	json.put("wss",add_https);
-
-
-	// 	return json.toString();
-
-
-
-
-
-
-	// }
-
-
-
-
-
-	// @Operation(summary = "分页查询国标设备")
-	// @GetMapping("/devices_StreamId")
-	// @Options()
-	// public String devices_StreamId(){
-
-
-		
-	// 	ObjectMapper mapper = new ObjectMapper();
-        
-	// 	ObjectNode json_all = mapper.createObjectNode();
-
-	// 	List<String> StreamList = new ArrayList<>();
-	// 	List<Device> devices=storager.queryVideoDeviceList(1, Integer.MAX_VALUE,null).getList();
-
-
-	// 	String ip_add = mediaConfig.getIp();
-	// 	String port = String.valueOf(mediaConfig.getHttpPort());
-	// 	String port_ssl = String.valueOf(mediaConfig.getHttpSSlPort());
-
-	// 	for (int i =0;i<devices.size();i++){
-	// 		String name_ = devices.get(i).getName();
-	// 		String deviceId=devices.get(i).getDeviceId();
-	// 		// storager.queryChannelsByDeviceId(deviceId, null, null, null, null, 1, Integer.MAX_VALUE);
-
-	// 		DeviceChannel target_dev = storager.queryChannelsByDeviceId(deviceId, null, null, null, null, 1, Integer.MAX_VALUE).getList().get(0);
-	// 		String StreamId = target_dev.getChannelId();
-			
-
-
-	// 		///rtp/3402000000320000003_34020000001320000001.live.flv
-
-	// 		//ws://123.57.67.33:50306/rtp/3402000000320000003_34020000001320000001.live.flv
-	// 		String add_http = "ws://"+ip_add+":"+port+"/rtp/" + deviceId+"_"+StreamId +".live.flv";
-	// 		String add_https = "wss://"+ip_add+":"+port_ssl+"/rtp/" + deviceId+"_"+StreamId +".live.flv";
-	// 		ObjectNode json = mapper.createObjectNode();
-	// 		json.put("name",name_);
-	// 		json.put("ChannelId",StreamId);
-	// 		json.put("ws",add_http);
-	// 		json.put("wss",add_https);
-
-		
-	// 		json_all.put( deviceId,json);
-		
-
-
-	// 	}
-	// 	return json_all.toString();
-
-
-	// }
-
-
-
-
 	/**
 	 * 分页查询国标设备
 	 * @param page 当前页
 	 * @param count 每页查询数量
 	 * @return 分页国标列表
-	 * @throws JsonProcessingException
-	 * @throws UnknownHostException
 	 */
 	@Operation(summary = "分页查询国标设备")
 	@Parameter(name = "page", description = "当前页", required = true)
 	@Parameter(name = "count", description = "每页查询数量", required = true)
 	@GetMapping("/devices")
 	@Options()
-	public PageInfo<Device> devices(int page, int count) throws JsonProcessingException, UnknownHostException{
-
-
+	public PageInfo<Device> devices(int page, int count){
+//		if (page == null) page = 0;
+//		if (count == null) count = 20;
 		return storager.queryVideoDeviceList(page, count,null);
 	}
-
-	
-
 
 	/**
 	 * 分页查询通道数

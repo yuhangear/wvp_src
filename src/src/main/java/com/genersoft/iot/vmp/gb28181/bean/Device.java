@@ -14,7 +14,7 @@ public class Device {
 	 * 设备国标编号
 	 */
 	@Schema(description = "设备国标编号")
-    public String deviceId;
+	private String deviceId;
 
 	/**
 	 * 设备名
